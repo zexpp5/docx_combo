@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Aspose.Words;
 
-namespace CSFirst
+namespace DocxCombo
 {
     class Program
     {
