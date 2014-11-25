@@ -80,7 +80,7 @@ namespace CSFirst
                 doc1.AppendDocument(doc2, ImportFormatMode.KeepSourceFormatting);
                 //doc1.FirstSection.PageSetup.SectionStart = SectionStart.NewPage;
                 //doc3.AppendDocument(doc2,ImportFormatMode.KeepSourceFormatting);
-                doc1.Save(path + "h1.docx");
+                doc1.Save(path + "h3.docx");
             }
         }
 

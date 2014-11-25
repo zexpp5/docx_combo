@@ -1,0 +1,35 @@
+{
+	"paperName": "测试试卷",
+	"paperSubject":"数学",
+	"countQuestion": "29",
+	"questions": [{
+			"questionType": "选择题",
+			"seq": 0,
+			"qAnalysis": "qp_hJ2tvi9369.650x.png",
+			"qAnswer": "qp_hJ2tvg6777.650x.png",
+			"qBody": "qp_hJ2tvb7037.650x.png",
+			"qDocx": "qd_hJ2tvV8144.docx",
+			"qOptions": "qp_hJ2tve0582.650x.png",
+			"rightOption": "D"
+		}, {
+			"questionType": "选择题",
+			"seq": 1,
+			"qAnalysis": "qp_hJ2tvi9369.650x.png",
+			"qAnswer": "qp_hJ2tvg6777.650x.png",
+			"qBody": "qp_hJ2tvb7037.650x.png",
+			"qDocx": "qd_hJ2tvV8144.docx",
+			"qOptions": "qp_hJ2tve0582.650x.png",
+			"rightOption": "D"
+		}, {
+			"questionType": "选择题",
+			"seq": 2,
+			"qAnalysis": "qp_hJ2tvi9369.650x.png",
+			"qAnswer": "qp_hJ2tvg6777.650x.png",
+			"qBody": "qp_hJ2tvb7037.650x.png",
+			"qDocx": "qd_hJ2tvV8144.docx",
+			"qOptions": "qp_hJ2tve0582.650x.png",
+			"rightOption": "D"
+		}
+
+	]
+}
