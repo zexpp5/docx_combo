@@ -6,9 +6,33 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Aspose.Words;
+using System.Web.Script.Serialization;
+
 
 namespace DocxCombo
 {
+    class Question
+    {
+        public string questionType;
+        public int seq;
+        public string qAnalysis;
+        public string qAnswer;
+        public string qBody;
+        public string qDocx;
+        public string rightOption;
+
+    }
+
+    class PaperCombo
+    {
+        public string paperName;
+        public string paperSubject;
+        public int countQuestion;
+        public List<Question> questions;
+
+    }
+
+
     class Program
     {
         static string path = @"F:\tmp\";
@@ -87,6 +111,36 @@ namespace DocxCombo
 
         static void Main(string[] args)
         {
+            foreach (string arg in args)
+            {
+                System.Console.WriteLine(arg);
+            }
+            if (args.Length > 0)
+            {
+                string jsonPath = args[0];
+
+
+
+                if (!File.Exists(jsonPath))
+                {
+                    throw new Exception("cannot find json.");
+                }
+                //读取文件
+                using (StreamReader sr = File.OpenText(jsonPath))
+                {
+
+                    string jsonStr = sr.ReadToEnd();
+
+
+                    JavaScriptSerializer jss = new JavaScriptSerializer();
+                    PaperCombo pc = jss.Deserialize<PaperCombo>(jsonStr);
+                    System.Console.WriteLine(pc.paperName);
+                    System.Console.WriteLine(pc.questions.Count);
+                    System.Console.WriteLine(pc.questions[0].qBody);
+                }
+            }
+
+
             compose(download());
 
 
