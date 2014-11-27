@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,7 @@ using System.Web.Script.Serialization;
 
 namespace DocxCombo
 {
-    class Question
+    class Question:IComparable
     {
         public string questionType;
         public int seq;
@@ -21,6 +22,29 @@ namespace DocxCombo
         public string qDocx;
         public string rightOption;
 
+        public int CompareTo(object obj)
+        {
+            int res = 0;
+            try
+            {
+                Question target = (Question)obj;
+                if (this.seq > target.seq)
+                {
+                    res = 1;
+                }
+                if (this.seq < target.seq)
+                {
+                    res = -1;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("comparation exception.",ex.InnerException);
+            }
+
+            return res;
+        }
     }
 
     class PaperCombo
@@ -35,12 +59,11 @@ namespace DocxCombo
 
     class Program
     {
-        static string path = @"F:\tmp\";
+        static string path = @"D:\tmp\";
 
 
-        private static DirectoryInfo download()
+        private static FileInfo[] download(string[] urls)
         {
-            string path = @"F:\tmp\";
             string tempFolderPath = System.Guid.NewGuid().ToString();
 
 
@@ -48,27 +71,24 @@ namespace DocxCombo
 
             WebClient webClient = new WebClient();
 
-            string[] urls = {"http://10.60.0.33/download/qd_i2emfd9572.docx",
-                             "http://10.60.0.33/download/qd_hygUS37346.docx",
-                             "http://10.60.0.33/download/qd_hygUS72295.docx",
-                             "http://10.60.0.33/download/qd_hygUSA3382.docx"};
 
             foreach (string url in urls)
             {
-                System.Console.WriteLine(path + tempFolderPath + url.Substring(url.LastIndexOf("/")));
+                System.Console.WriteLine(url);
 
-                webClient.DownloadFile(url, path + tempFolderPath + url.Substring(url.LastIndexOf("/")));
+                System.Console.WriteLine(path + tempFolderPath +"\\"+ url);
+
+                webClient.DownloadFile("http://res01.ezxdf.cn/download/"+url, path + tempFolderPath +"\\"+ url);
             }
             //System.Console.ReadKey();
 
-
-            return dir;
+            System.Console.WriteLine(dir.ToString());
+            return dir.GetFiles();
         }
 
-        private static void compose(DirectoryInfo dir)
+        private static void compose(FileInfo[] files)
         {
 
-            FileInfo[] files = dir.GetFiles();
             Document template = new Document();
             //template.FirstSection.PageSetup.SectionStart = SectionStart.Continuous;
             Document tempDoc = new Document();
@@ -80,7 +100,7 @@ namespace DocxCombo
 
             }
 
-            template.Save(System.IO.Path.Combine(dir.FullName, "result.docx"));
+            template.Save(System.IO.Path.Combine(path, "result.docx"));
 
 
 
@@ -115,6 +135,7 @@ namespace DocxCombo
             {
                 System.Console.WriteLine(arg);
             }
+
             if (args.Length > 0)
             {
                 string jsonPath = args[0];
@@ -126,6 +147,8 @@ namespace DocxCombo
                     throw new Exception("cannot find json.");
                 }
                 //读取文件
+
+                PaperCombo pc = null;
                 using (StreamReader sr = File.OpenText(jsonPath))
                 {
 
@@ -133,17 +156,33 @@ namespace DocxCombo
 
 
                     JavaScriptSerializer jss = new JavaScriptSerializer();
-                    PaperCombo pc = jss.Deserialize<PaperCombo>(jsonStr);
+                    pc = jss.Deserialize<PaperCombo>(jsonStr);
                     System.Console.WriteLine(pc.paperName);
                     System.Console.WriteLine(pc.questions.Count);
                     System.Console.WriteLine(pc.questions[0].qBody);
                 }
+
+                
+
+                pc.questions.Sort();
+
+                int paperSize = pc.questions.Count;
+
+                string[] qBodyPaths = new string[paperSize];
+                string[] qAnswerPaths = new string[paperSize];
+
+                for (int i = 0; i < paperSize; i++)
+                {
+                    qBodyPaths[i] = pc.questions[i].qBody;
+                    qAnswerPaths[i] = pc.questions[i].qAnswer;
+                }
+
+
+
+
+                compose(download(qBodyPaths));
+
             }
-
-
-            compose(download());
-
-
         }
     }
 }
