@@ -92,15 +92,46 @@ namespace DocxCombo
             Document template = new Document();
             //template.FirstSection.PageSetup.SectionStart = SectionStart.Continuous;
             Document tempDoc = new Document();
+            DocumentBuilder docbuilder = null;
+            int qIndex = 0;
             foreach (FileInfo file in files)
             {
+                qIndex++;
+
                 tempDoc = new Document(file.FullName);
+                docbuilder = new DocumentBuilder(tempDoc);
+                docbuilder.MoveToParagraph(0, 0);
+                docbuilder.Write(qIndex+".");
+                docbuilder.MoveToDocumentEnd();
+                docbuilder.Writeln("");
+                docbuilder.Writeln("");
+                docbuilder.Writeln("");
+
+
+
                 tempDoc.FirstSection.PageSetup.SectionStart = SectionStart.Continuous;
                 template.AppendDocument(tempDoc, ImportFormatMode.KeepSourceFormatting);
+
+
 
             }
 
             template.Save(System.IO.Path.Combine(path, "result.docx"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
