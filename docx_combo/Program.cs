@@ -62,8 +62,6 @@ namespace DocxCombo
     {
         static string path = @"D:\tmp\";
 
-
-
         private static DirectoryInfo downloadQuestionDocxs(List<Question> questions)
         {
             string tempFolderPath = System.Guid.NewGuid().ToString();
@@ -202,7 +200,6 @@ namespace DocxCombo
 
 
                 composeQuestionDocx(downloadQuestionDocxs(pc.questions), pc.questions, withAnswerSheet);
-                //compose(download(qBodyPaths));
 
             }
         }
