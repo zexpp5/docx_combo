@@ -63,6 +63,30 @@ namespace DocxCombo
         static string path = @"D:\tmp\";
 
 
+        private static FileInfo[] download(string[] urls)
+        {
+            string tempFolderPath = System.Guid.NewGuid().ToString();
+
+
+            DirectoryInfo dir = System.IO.Directory.CreateDirectory(path + tempFolderPath);
+
+            WebClient webClient = new WebClient();
+
+
+            foreach (string url in urls)
+            {
+                System.Console.WriteLine(url);
+
+                System.Console.WriteLine(path + tempFolderPath +"\\"+ url);
+
+                webClient.DownloadFile("http://res01.ezxdf.cn/download/"+url, path + tempFolderPath +"\\"+ url);
+            }
+            //System.Console.ReadKey();
+
+            System.Console.WriteLine(dir.ToString());
+            return dir.GetFiles();
+        }
+
 
         private static DirectoryInfo downloadQuestionDocxs(List<Question> questions)
         {
@@ -82,6 +106,41 @@ namespace DocxCombo
             return dir;
         }
 
+
+        private static void compose(FileInfo[] files)
+        {
+
+            Document template = new Document();
+            //template.FirstSection.PageSetup.SectionStart = SectionStart.Continuous;
+            Document tempDoc = new Document();
+            DocumentBuilder docbuilder = null;
+            int qIndex = 0;
+            foreach (FileInfo file in files)
+            {
+                qIndex++;
+
+                tempDoc = new Document(file.FullName);
+                docbuilder = new DocumentBuilder(tempDoc);
+                docbuilder.MoveToParagraph(0, 0);
+                docbuilder.Write(qIndex+".");
+                docbuilder.MoveToDocumentEnd();
+                docbuilder.Writeln("");
+                docbuilder.Writeln("");
+                docbuilder.Writeln("");
+
+
+
+                tempDoc.FirstSection.PageSetup.SectionStart = SectionStart.Continuous;
+                template.AppendDocument(tempDoc, ImportFormatMode.KeepSourceFormatting);
+
+
+
+            }
+
+            template.Save(System.IO.Path.Combine(path, "result.docx"));
+
+
+        }
 
 
         private static void composeQuestionDocx(DirectoryInfo dir, List<Question> questions,bool withAnswer)
